@@ -50,6 +50,7 @@
                             imgElement.src = photoUrl;
                             imgElement.style.width = '100px';
                             imgElement.classList.add('dynamic-garbage-image'); // Add a class for easy removal
+                            document.body.appendChild(imgElement);
                         });
                     })
                         .on('mouseout', function () {
