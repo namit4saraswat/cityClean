@@ -16,6 +16,10 @@ form {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+body {
+    padding-top: 60px; /* Adjust this value based on the actual height of your navbar */
+}
+
 label {
     display: block;
     margin-bottom: 5px;

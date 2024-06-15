@@ -4,20 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Garbage Data Submission</title>
-    <link rel="stylesheet" href="garbage-report-style.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="garbage-report-style.css">
+    <link rel="stylesheet" href="home-page.css">
 </head>
 <body>
-    <h2>Report Garbage</h2>
+    <div class="navbar">
+        <a href="/index.html">Home</a>
+        <a href="/garbage-report.html">Report Garbage</a>
+    </div>
     <form id="garbageForm">
         <label for="intensity">Intensity (1-10):</label>
         <input type="number" id="intensity" name="intensity" min="1" max="10" required>
         
         <label for="description">Description:</label>
         <textarea id="description" name="description" required></textarea>
-        
+        <input type="file" id="images" name="images" multiple>
         <button type="submit">Submit</button>
     </form>
 
     <script src="garbage-report-script.js"></script> <!-- Link to your JavaScript file -->
+    <div class="footer">
+        © 2023 City Cleanliness Initiative. All rights reserved.
+    </div>
 </body>
 </html>

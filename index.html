@@ -4,6 +4,7 @@
 <head>
     <title>City Cleanliness Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link href="home-page.css" rel="stylesheet">
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <style>
         #map {
@@ -13,37 +14,56 @@
 </head>
 
 <body>
+    <div class="navbar">
+        <a href="/index.html">Home</a>
+        <a href="/garbage-report.html">Report Garbage</a>
+    </div>
     <a href="/garbage-report.html">Report Garbage</a>
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/node-fetch/dist/index.js"></script>
     <script>
         var map = L.map('map').setView(['28.489714189456166', '77.09349407375194'], 13);
-    
+
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             subdomains: 'abcd',
             maxZoom: 20
         }).addTo(map);
-        
+
         fetch('http://localhost:3000/garbage')
-            .then(response => response.json()) 
+            .then(response => response.json())
             .then(data => {
-                var garbageAreas = data; 
-                console.log(garbageAreas);
-            
+                var garbageAreas = data;
+
+                console.log(garbageAreas)
                 garbageAreas.forEach(function (area) {
                     var color = `rgba(255, 0, 0, ${area.intensity / 10})`; // Adjust color intensity
                     L.circle([area.location.lat, area.location.lng], {
                         color: color,
                         fillColor: color,
                         fillOpacity: 0.5,
-                        radius: 50 // Adjust based on the area size
-                    }).addTo(map);
+                        radius: 50
+                    }).addTo(map).on('mouseover', function () {
+                        area.photoUrls.forEach(function (photoUrl) {
+                            var imgElement = document.createElement('img');
+                            imgElement.src = photoUrl;
+                            imgElement.style.width = '100px';
+                            imgElement.classList.add('dynamic-garbage-image'); // Add a class for easy removal
+                        });
+                    })
+                        .on('mouseout', function () {
+                            document.querySelectorAll('.dynamic-garbage-image').forEach(function (img) {
+                                img.remove(); // Remove images on mouse out
+                            });
+                        });
                 });
             })
             .catch((error) => console.error('Error:', error));
     </script>
+    <div class="footer">
+        © 2023 City Cleanliness Initiative. All rights reserved.
+    </div>
 </body>
 
 </html>

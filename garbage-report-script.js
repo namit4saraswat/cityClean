@@ -1,34 +1,30 @@
 document.getElementById('garbageForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the form from submitting the traditional way
 
-    // Check if the browser supports geolocation
     if (!navigator.geolocation) {
         alert('Geolocation is not supported by your browser');
         return;
     }
-
     navigator.geolocation.getCurrentPosition(function(position) {
-        // Get the form data
-        const intensity = document.getElementById('intensity').value;
-        const description = document.getElementById('description').value;
+        const formData = new FormData();
+        formData.append('intensity', document.getElementById('intensity').value);
+        formData.append('description', document.getElementById('description').value);
+        formData.append('lat', position.coords.latitude);
+        formData.append('lng', position.coords.longitude);
+        const images = document.getElementById('images').files;
+        for (let i = 0; i < images.length; i++) {
+            formData.append('images', images[i]);
+        }
 
-        // Prepare the data to be sent
-        const data = {
-            location: {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            },
-            intensity: intensity,
-            description: description
-        };
+        // only for debuggin
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
 
-        // Use Fetch API to send the data to the server
+        // Use Fetch API to send the FormData to the server
         fetch('http://localhost:3000/garbage', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+            body: formData, // No headers needed, as FormData sets the correct Content-Type
         })
         .then(response => response.json())
         .then(data => {
@@ -44,4 +40,3 @@ document.getElementById('garbageForm').addEventListener('submit', function(event
         alert('Unable to retrieve your location');
     });
 });
-

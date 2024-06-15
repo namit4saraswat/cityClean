@@ -1,0 +1,41 @@
+/* Add to garbage-report-style.css */
+/* Navigation Bar */
+.navbar {
+    background-color: #007bff;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #0056b3;
+}
+
+/* Footer */
+.footer {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.dynamic-garbage-image {
+    position: absolute;
+    width: 100px; /* Adjust size as needed */
+    pointer-events: none; /* Ensures the cursor doesn't interact with the image */
+    z-index: 1001; /* Ensure it's above other elements */
+}
