@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>City Cleanliness Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/garbage-report.html">Report Garbage</a>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/node-fetch/dist/index.js"></script>
+    <script>
+        var map = L.map('map').setView(['28.489714189456166', '77.09349407375194'], 13);
+    
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+        
+        fetch('http://localhost:3000/garbage')
+            .then(response => response.json()) 
+            .then(data => {
+                var garbageAreas = data; 
+                console.log(garbageAreas);
+            
+                garbageAreas.forEach(function (area) {
+                    var color = `rgba(255, 0, 0, ${area.intensity / 10})`; // Adjust color intensity
+                    L.circle([area.location.lat, area.location.lng], {
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.5,
+                        radius: 50 // Adjust based on the area size
+                    }).addTo(map);
+                });
+            })
+            .catch((error) => console.error('Error:', error));
+    </script>
+</body>
+
+</html>
