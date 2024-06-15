@@ -44,20 +44,38 @@
                         fillColor: color,
                         fillOpacity: 0.5,
                         radius: 50
-                    }).addTo(map).on('mouseover', function () {
+                    }).addTo(map).on('mouseover', function (e) {
                         area.photoUrls.forEach(function (photoUrl) {
                             var imgElement = document.createElement('img');
                             imgElement.src = photoUrl;
                             imgElement.style.width = '100px';
+                            imgElement.style.position = 'absolute'; // Position the image absolutely
                             imgElement.classList.add('dynamic-garbage-image'); // Add a class for easy removal
+
+                            // Function to update image position
+                            function updateImagePosition(event) {
+                                imgElement.style.left = event.clientX + 15 + 'px'; // 15px to the right of the cursor
+                                imgElement.style.top = event.clientY + 15 + 'px'; // 15px below the cursor
+                            }
+
+                            // Listen for mouse movement to update image position
+                            document.addEventListener('mousemove', updateImagePosition);
+
+                            // Append the image to the body
                             document.body.appendChild(imgElement);
-                        });
-                    })
-                        .on('mouseout', function () {
-                            document.querySelectorAll('.dynamic-garbage-image').forEach(function (img) {
-                                img.remove(); // Remove images on mouse out
+
+                            // Remove the event listener when the mouse moves away
+                            imgElement.addEventListener('mouseout', function () {
+                                imgElement.remove();
+                                document.removeEventListener('mousemove', updateImagePosition); // Stop tracking mouse movement
                             });
                         });
+                    }).on('mouseout', function () {
+                        // Remove images and mousemove event listener on mouse out
+                        document.querySelectorAll('.dynamic-garbage-image').forEach(function (img) {
+                            img.remove(); // Remove images on mouse out
+                        });
+                    });
                 });
             })
             .catch((error) => console.error('Error:', error));
